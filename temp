@@ -1,0 +1,829 @@
+
+
+
+	import java.math.BigInteger;
+	import java.net.InetAddress;
+	import java.net.UnknownHostException;
+	import java.util.ArrayList;
+	import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+	import java.io.FileReader;
+	import java.io.IOException;
+	import java.lang.*;
+	import jdd.bdd.*;
+	import jdd.util.*;
+	import jdd.util.math.*; 
+	public class temp extends BDD
+	{
+		public static String[] topoLines=null;
+
+		private static final int SIZE = 32;
+		private static final int I_P[] = new int[SIZE];
+		public int mVal;
+		
+		public static ArrayList<String> APs = new ArrayList<String>();
+		
+		
+		//private static int bdds[];
+		public temp(String s)
+		{
+			super(10000,1000);
+			APs.add(s);
+			System.out.println("SIZE OF APS" + APs.size());
+			//implement(s);
+			
+		}
+		public temp() {
+			super(10000,1000);
+		}
+		public ArrayList<Integer> makeAtomic(int[] finalbdds)//must relate final bdds with port numbers
+		{
+			int atomicbdds[] = new int [finalbdds.length];
+			int natomicbdds[] = new int[finalbdds.length];
+			System.out.println(finalbdds.length + "LENGTH OF FINALBDDS");
+			for(int i = 0; i < finalbdds.length;i++)
+			{
+				atomicbdds[i] = finalbdds[i];
+				natomicbdds[i] = ref(not(finalbdds[i]));
+			}
+			int[][] interimABDD = new int[2*finalbdds.length][2]; 
+			
+			for(int i = 0 ; i < finalbdds.length;i++) // potential issue with 'true' cases 
+			{
+				for(int j=0; j <2; j++)
+				{
+					if(j==0 && atomicbdds[i]!= 0)
+						interimABDD[i][j]=atomicbdds[i];
+					else if(j!=0 && atomicbdds[i]!=0)
+						interimABDD[i][j]=natomicbdds[i];
+					else
+						interimABDD[i][j]=1;
+				}
+			}
+			ArrayList<Integer> atomicPredicates = new ArrayList<Integer>();
+			atomicPredicates.add(interimABDD[0][0]);
+			atomicPredicates.add(interimABDD[0][1]);
+			for(int i=0;i<finalbdds.length;i++)
+			{
+				for(int j=0;j<2;j++)
+				{
+					int iterate=0;
+					while(iterate<atomicPredicates.size())
+					{
+						int temp = atomicPredicates.get(iterate);
+						temp = ref(and(temp,interimABDD[i][j]));
+						if(temp != 0)
+							atomicPredicates.add(temp);
+						
+						iterate++;
+					}
+				}
+			}
+			return atomicPredicates;
+		}
+			
+		
+		public void reachable(int[] atomicbdds,int [] path)//path represents the unique port numbers that have been touched
+		{
+			
+			int[] relevantBDD = new int[path.length];
+			for(int i=0;i < path.length;i++)
+			{
+				for(int j = 0; j < atomicbdds.length;j++)
+				{
+					if(j == path[i])
+					{
+						relevantBDD[i] = atomicbdds[j]; 
+					}	
+				}
+			}
+			int areReachable= relevantBDD[0];
+			int noAnds = relevantBDD.length-1;
+			for(int i = 1 ; i <=noAnds; i++)
+			{
+				
+				areReachable = ref(and(areReachable, relevantBDD[i]));
+				deref(relevantBDD[i]);
+					
+			}
+			//print(areReachable);
+			System.out.println("REACHABLE");
+			print(areReachable);
+			
+		}
+		public void callImplement()
+		{
+			ArrayList total = new ArrayList();
+			int bdds[] = new int[APs.size()];
+			System.out.println(APs.size() + "APS SIZE");
+		    for(int i =0; i < APs.size();i++)
+		    {
+		    	bdds[i] = implement(APs.get(i));
+		    	if(bdds[i]!=0)
+		    	{
+		    		total.add(i);
+		    		printCubes(bdds[i]);
+		    		
+		    		
+		   		
+		    	}
+		    	System.out.println(total.size() + "= total size ");
+		    	
+		    }
+		    for(int i = 0; i < total.size();i++)
+		   System.out.println("total" +total.get(i));
+		    
+		    
+		    int[] path = {0};
+		    ArrayList <Integer> atomic = new ArrayList<Integer>();
+		  //  atomic = makeAtomic(bdds);
+		  //  int atomicSize = atomic.size();
+		  //  int[] finalAtomic = new int[atomicSize];
+		 //   for(int i =0 ; i < atomicSize;i++)
+		//    {
+		//    	finalAtomic[i]= atomic.get(i);
+		//    }
+		    		
+		    reachable(bdds, path);
+		}
+		public int implement(String s)
+		{
+			for(int i = 0 ; i < SIZE; i++)
+			{
+				I_P[i] = createVar();
+			}
+			
+			System.out.println(s+ " String s ");
+			s=s.replaceAll("\\s","");
+			int countOrs = s.length() - s.replace("+", "").length();
+			System.out.println(countOrs + "Countors");
+			int temp[] = new int[countOrs+1];
+			int flag  = 0;
+		    if(countOrs == 0)
+		    {
+		    	flag =1;
+		    	countOrs =1;
+		    }
+			String tempval = "";
+			int z=0;
+			ArrayList<String> SmallerVals = new ArrayList<String>(); 
+			for(int j = 0 ; j < countOrs; j++)
+			{
+				tempval = "" ;
+				while(s.charAt(z)!= '+'  )
+				{
+					tempval = tempval + s.charAt(z);
+				//	System.out.println(tempval + "This is tempval");
+					if(z == s.length()-1)
+						break;
+					z++;
+					
+				}
+				
+				z++;
+			//	System.out.println(tempval + "this is tempval out");
+				SmallerVals.add(tempval);
+			}
+			int nots;
+			tempval = ""; 
+			
+			for(int i = 0; i < SmallerVals.size(); i++) 
+			{
+				String val = SmallerVals.get(i);
+			//	System.out.println((val.charAt(0)-97) +"this is val at 0 - 97" );
+				if(Character.isDigit(val.charAt(0)))
+				{
+					temp[i]=0;
+					break;
+				}
+				temp[i]=I_P[val.charAt(0)-97];
+				
+				System.out.println(I_P[0] + "this is temp["+i+ "]");
+			    for(int j = 0 ; j < val.length() ; j++) { 
+			    	System.out.println("value of j = " + j + "val.length()" + val.length());
+			        if(j == val.length()-1 && val.charAt(j)!='\'') {
+			            temp[i] = ref(and(temp[i],I_P[val.charAt(j)-97]));
+			            break;
+			        }
+			        else if(j == val.length()-2 && flag == 1)
+			        {
+			        	temp[i] = ref(not(temp[i]));
+			        	System.out.println(temp[i] + "result supposed");
+			        	break;
+			        }
+			        else if(j==val.length()-1)
+			        {
+			        	temp[i] = ref(and(temp[i], not(I_P[val.charAt(j-1)-97])));
+			        	System.out.println(temp[i]+ "result supposed");
+			        	printCubes(temp[i]);
+			        	break;
+			        }
+
+			        else if( Character.isLetter(val.charAt(j))&& val.charAt(j+1) != '\'' ) {
+			        	temp[i] = ref(and(temp[i],I_P[((int)SmallerVals.get(i).charAt(j))-97]));
+			        } 
+			        else if((val.charAt(j)=='{'||val.charAt(j)=='|')&&val.charAt(j+1)!='\'')
+			        {
+			        	if((val.charAt(j)=='{'))
+			        		temp[i]=ref(and(temp[i],I_P[27]));
+			        	else
+			        		temp[i]=ref(and(temp[i],I_P[28]));
+			        }
+			        else if((val.charAt(j)!='{'||val.charAt(j)!='|')&&val.charAt(j+1)=='\'') {
+			        
+			        	nots = ref(not(I_P[SmallerVals.get(i).charAt(j)-97]));
+						temp[i] = ref(and(temp[i],nots));
+						deref(nots);
+			            j++;
+			       }
+			        else
+			        {
+			        	if((val.charAt(j-1)=='{'))
+			        		temp[i]=ref(and(temp[i],I_P[27]));
+			        	else
+			        		temp[i]=ref(and(temp[i],I_P[28]));
+			        	j++;
+			        }
+			        
+			    }
+			}
+			int finalbdd= temp[0];
+			System.out.println(temp.length + "temp length in ");
+			for(int i = 1 ; i <=countOrs; i++)
+			{
+				if(temp.length == 1)
+					break;
+				finalbdd = ref(or(finalbdd, temp[i]));
+				deref(temp[i]);
+					
+			}
+			System.out.println("final bdd");
+		printCubes(finalbdd);
+		return finalbdd;
+			
+		}
+	   	   
+		public static temp modification(List<String> listOfString)
+		{
+		    int temp1[] = new int[listOfString.size()];
+		    String temp = "" ;
+
+			 for(int i = 0; i < listOfString.size(); i++)
+			    {
+			    	String vals = listOfString.get(i);
+			    	
+			    	if((vals).charAt((vals).length() -1)=='2')
+			    	{	      
+			   // 		System.out.println((vals).charAt((vals).length() -1));
+			    		temp = vals.substring(32,vals.length()-3);
+			    		
+			    		temp1[i] = Integer.parseInt(temp,2);
+			    	//	System.out.println(temp1[i]);
+			    	}
+			    	temp ="";
+			    }
+			    MinimizedTable M = new MinimizedTable(temp1);
+		//	    System.out.println("Minimized: " + M.toString());
+			    temp ap = new temp(M.toString());
+			    return ap;
+			 
+		}
+		public void routeRedistribute(int[] mapArray, Map ports,int sizeOfFile,ArrayList<String>[] listOfString)// new proto is just n bits, old is the entire thing
+		{
+			
+			
+			//trial begins here
+			
+			//int [] mapArray = new int[ports.size()];
+			int x=0;
+	        Iterator it = ports.entrySet().iterator();
+	        while (it.hasNext()) {
+	            Map.Entry pair = (Map.Entry)it.next();
+	            mapArray[x] = (int) pair.getValue();
+	           System.out.println(pair.getKey() + " = " + pair.getValue());
+	            x++;
+	            it.remove(); // avoids a ConcurrentModificationException
+	        }
+		
+			    System.out.println(mapArray.length);
+		    ArrayList<Integer> temp1[] = new ArrayList[mapArray.length];
+		   // System.out.println(ports.size());
+		    
+		    String temp = "" ;
+		    String res1[] = new String[2];
+		    //System.out.println(mapArray.length);
+		    for(int i = 0 ; i < mapArray.length; i++)
+		    {
+		    	System.out.println(mapArray[i]+ "MAP ARRAY VALS");
+		    }
+		   System.out.println("Size of maparray"+ mapArray.length);
+		  // System.out.println(listOfString.length + "redist");
+		   int count=0;
+		   for(int k = 0 ; k < listOfString.length;k++)
+		   {
+			   if(listOfString[k]==null)
+				   continue;
+			   else
+				   count++;
+		   }
+		    for(int k = 0; k < count;k++)
+		    {
+		    	
+		    	for(int j = 0 ; j < mapArray.length;j++)
+		    	{	
+		    	//	temp1[j]= new ArrayList<Integer>();
+		    		System.out.println("outside i" + j);
+		    		for(int i = 0; i < listOfString[k].size(); i++)
+		    		{
+		    			System.out.println("inside i" + i);
+		        		res1 = listOfString[k].get(i).split("\\s+");
+
+		    			String vals = res1[1];
+		    			System.out.println(vals + " vals" );
+		    			
+		    			if((vals).endsWith(Integer.toString(mapArray[j])))
+		    			{	      
+		    				System.out.println("vals inside" + vals);
+		    				temp = vals.substring(0,24);
+		    				System.out.println(Integer.parseInt(temp,2) + "PARSED");
+		    				
+				    		temp1[j]= new ArrayList<Integer>();
+
+		    				temp1[j].add(Integer.parseInt(temp,2));
+		    				System.out.println(temp1[j].size() + "SIZE TEST of" + j);
+		    			//	System.out.println(mapArray[j]);
+		    		                         
+		    			}
+		    			//temp ="";
+		    				
+		    		}
+		    		
+		    	}
+		  	
+		    }
+		    
+		  //  System.out.println(temp1[0].size() + "Size outside loop");
+		    
+		   MinimizedTable M[]=new MinimizedTable[mapArray.length];
+		   // System.out.println(temp1[0].size() + "Temp length");
+		    for(int i = 0 ; i < temp1.length;i++)
+		    {
+		    	System.out.println(temp1[i] +  "Temp1.leen");
+		    }
+		    for(int i = 0 ; i < temp1.length;i++)
+		    {
+		    	if(temp1[i] == null)
+		    		temp1[i]= new ArrayList<Integer>();
+		    	int[][] finalvals = new int[temp1.length][temp1[i].size()];
+		    	for(int j = 0; j < temp1[i].size();j++)
+		    	{
+		    		finalvals[i][j]=temp1[i].get(j);
+		    		System.out.println(temp1[i].get(j)+ "temp1[].get[]");
+		    	}
+		    
+		    
+			
+		    
+		    System.out.println(temp1.length + "temp1.length");
+		 	System.out.println("Temp1["+i+"] = " + temp1[i]);
+	 M[i] = new MinimizedTable(finalvals[i]);
+	 	System.out.println("Minimized: " + M[i].toString());
+		   
+		    }
+		    temp ap[] = new temp[temp1.length];
+		    for(int i =0;i<temp1.length;i++)
+		    {
+		    	ap[i] = new temp(M[i].toString());
+		    }
+	//	    return sizeOfFile;
+		}
+		public static temp aggregation(List<String> listOfString, String aggregate) // make sure aggregate takes into consideration the prefix
+		{
+		    int temp1[] = new int[listOfString.size()];
+		    String temp = "" ;
+
+			 for(int i = 0; i < listOfString.size(); i++)
+			    {
+			    	String vals = listOfString.get(i);
+			    	
+			    	if((vals).charAt((vals).length() -1)=='2')
+			    	{	      
+			   // 		System.out.println((vals).charAt((vals).length() -1));
+			    		temp = vals.substring(32,vals.length()-3);
+			    		
+			    		temp1[i] = Integer.parseInt(temp,2);
+			    	//	System.out.println(temp1[i]);
+			    	}
+			    	temp ="";
+			    }
+			    MinimizedTable M = new MinimizedTable(temp1);
+		//	    System.out.println("Minimized: " + M.toString());
+			    temp ap = new temp(M.toString());
+			    return ap;
+			 
+		}
+		public static String ipToBin(String ip)
+		{
+		    StringBuilder bStringBuilder = new StringBuilder();
+	        String ipParts[] = ip.split("\\.");
+
+	        for (String ipPart : ipParts) {
+
+	            String binString = Integer.toBinaryString(Integer.parseInt(ipPart));
+	            int length = 8 - binString.length();
+	            char[] padArray = new char[length];
+	            Arrays.fill(padArray, '0');
+	            bStringBuilder.append(padArray).append(binString);}
+	            return bStringBuilder.toString();
+	     }
+		@SuppressWarnings("unchecked")
+		public static void topology(String begin, String end) throws IOException
+		{
+			 
+			BufferedReader br = new BufferedReader(new FileReader("./src/topology_purdue2.txt"));
+
+		    StringBuilder sb = new StringBuilder();
+		    String line = br.readLine();
+
+		    while (line != null) {
+		        sb.append(line);
+		        sb.append(System.lineSeparator());
+		        line = br.readLine();
+		    }
+		    String everything = sb.toString();
+			br.close();
+			
+			ArrayList<String> containstopo = new ArrayList<String>();
+			topoLines = everything.split(System.getProperty("line.separator"));
+			System.out.println(topoLines[1]);
+			HashMap<String, ArrayList> topo = new HashMap<String, ArrayList>();
+	        String[] result = new String[2] ;
+	       // ArrayList<String> map = new ArrayList<String>();
+			for(int i = 0 ; i < topoLines.length; i++)
+			{
+				result=topoLines[i].split("\\s+");
+				System.out.println(result[0]);
+				if(topo.isEmpty())
+				{
+					ArrayList<String> map = new ArrayList<String>();
+					map.add(result[1]);
+					topo.put(result[0], map);
+				}
+				if(topo.containsKey(result[0]))
+				{
+					containstopo = topo.get(result[0]);
+					containstopo.add(result[1]);
+					topo.put(result[0],containstopo);
+					
+				}
+				else
+				{
+					ArrayList<String> map = new ArrayList<String>();
+					map.add(result[1]);
+					topo.put(result[0], map);
+				}
+			}
+			
+		  
+		    ArrayList<String> map = new ArrayList<String>();
+		    map = topo.get(begin);
+		    System.out.println(topo.size() + "topo size");
+		    for(int i =0; i < map.size();i++)
+		    {
+		    	if(end.equals(map.get(i)))
+		    	{
+		    		System.out.println("REACHABLE");
+		    		break;
+		    	}
+		    	else
+		    	{
+		    		checkMap(topo, map.get(i),end);
+		    	}
+		    }
+		}
+		public static void checkMap(HashMap<String, ArrayList> topo, String key, String end)
+		{
+			int flag = 0;
+			ArrayList<String> map = new ArrayList<String>();
+			map =  topo.get(key);
+			for(int i =0 ; i < map.size();i++){
+				if(end.equals(map.get(i)))
+				{
+					System.out.println("REACHABLE");
+					flag = 1;
+					break;
+				}
+				else
+					continue;
+			}
+			if(flag ==0)
+			System.out.println("NOT REACHABLE");
+			
+			
+		}
+			
+		
+		@SuppressWarnings("null")
+		public static void main(String[] Args) throws UnknownHostException, IOException
+		{
+			topology("config1596","config1352");
+			long c1 = System.currentTimeMillis();
+			int sizeOfFile = new File("./src/final_configs/").listFiles().length;
+			System.out.println(sizeOfFile);
+			Map<String,Integer> ports = new HashMap<String, Integer>();
+			int portVal = 0;
+		    ArrayList<String> listOfString[] = new ArrayList[sizeOfFile];
+		 //reading in the routers
+		    int lineNo=0;
+			
+			String[][] lines = new String[sizeOfFile][];
+		    String target_dir = "./src/final_configs/";
+	        File dir = new File(target_dir);
+	        File[] files = dir.listFiles();
+	        String everything = "";
+	        for (File f : files) {
+	            if(f.isFile()) {
+	                BufferedReader inputStream = null;
+
+	                
+	                    inputStream = new BufferedReader(
+	                                    new FileReader(f));
+	                    
+	                    StringBuilder sb = new StringBuilder();
+	        		    String line1 = inputStream.readLine();
+	                    while ((line1 ) != null) {
+	                    	sb.append(line1);
+	        		        sb.append(System.lineSeparator());
+	        		        line1 = inputStream.readLine();
+	                    
+	                     everything = sb.toString();
+	                     //System.out.println(everything + "everything");
+	                }
+	                
+	                    if (inputStream != null) {
+	                        inputStream.close();
+	                    }
+	                
+	    			lines[lineNo] = everything.split(System.getProperty("line.separator"));
+	    //			System.out.println(lines[lineNo] + "LIne number is = " + lineNo);
+	    			lineNo++;
+	            }
+	        }
+	        System.out.println(lineNo + "lines 1");
+	        String[][] result = new String[sizeOfFile][];
+	        
+	        for(int j=0;j<sizeOfFile;j++)
+			{
+	        	listOfString[j]=new ArrayList<String>();
+	        System.out.print(lines[j].length + "lines");
+	        	for(int i = 0; i < lines[j].length;i++)
+	        	{
+	        		//System.out.println(lines[j].length + "there");
+	        		result[j] = lines[j][i].split("\\|");
+	        		//System.out.println("val of j" + j);
+	    //    	System.out.println(ipToBin(result[j][1]));
+	        		if(lines[j].length==1)
+	        			//break;
+	        		System.out.println("j2" + result[j][2]);
+	        		if((result[j][1].compareTo("drop")==0) || (result[j][1].compareTo("receive")==0) || (result[j][1].compareTo("attached")==0)||result[j].length==2)
+	        			continue;
+	        		//if(ports.isEmpty())
+	        			//{ports.put(result[j][1], portVal);
+	        			//System.out.println("result is "+ result[j][1] + " port val is " + portVal + " result[j][2] is" + result[j][2]);
+	        			
+	        		//portVal++;}
+	        	
+	        		else if(ports.get(result[j][0]+result[j][1]) == null)
+	        		{
+	        			//System.out.println(result[j][2]);
+	        			System.out.println("resul[j][0] is = " + result[j][0] + " result[j][1]=" + result[j][1] + " result[j][2]="+result[j][2]+ " result[j][3] = " + result[j][3]);
+	        			//System.out.println("result is "+ result[j][0] + " port val is " + portVal  + "result[j][3] is" + result[j][3]);
+	        			ports.put(result[j][0]+result[j][1], portVal);
+	        			portVal++;
+	        		}
+
+	        		
+	        //	System.out.println("Size of ports" + ports.size());
+	        	}
+			}
+	        System.out.println("Size of ports"+ ports.size());
+	        ArrayList<String>[] redist = new ArrayList[sizeOfFile];
+	        String res2[]= new String[2];
+	        ArrayList<Integer> Total  = new ArrayList<Integer>();
+	        int value = 0; int flag=0;
+	        int greater=0;
+	        for(int j=0;j<sizeOfFile;j++)
+			{
+	        	listOfString[j]=new ArrayList<String>();
+	        	for(int i = 0; i < lines[j].length;i++)
+	        	{
+	        		result[j] = lines[j][i].split("\\|");
+	        		if((result[j][0].compareTo("")!=0)&&(result[j][1].compareTo("drop")!=0) && (result[j][1].compareTo("receive")!= 0) && (result[j][1].compareTo("attached")!=0)&&result[j].length!=2)
+	        		{
+	        			for (Map.Entry<String, Integer> entry : ports.entrySet())
+	        			{
+	        				
+	        				if((result[j][0]+result[j][1]).equals(entry.getKey()))
+	        					{
+	        						
+	        						value = entry.getValue();
+	        					//	System.out.println(result[j][0] + "val= " +value);
+	        						for(int n=0;n<Total.size();n++)
+	        						{
+	        							if(Total.get(n).equals(value))
+	        								flag = 1;
+	        								
+	        							
+	        						}
+	        						int kval=0;
+	        						
+	        						if(flag == 0)
+	        							Total.add(value);
+	        						flag = 0;
+	        						if((result[j].length==5)&&result[j][4].equals("redistribute"))
+	        						{
+	        				//			System.out.println("This is redistributed "+ result[j][3] + " "+ipToBin(result[j][0])+""+value);
+	        							 redist[j] = new ArrayList<String>();
+	        							redist[j].add(String.valueOf(String.valueOf(Long.toBinaryString(Long.parseLong(result[j][2]))))+" "+value);
+        								listOfString[j].add(String.valueOf(String.valueOf(Long.toBinaryString(Long.parseLong(result[j][2]))))+" "+value);
+
+	        							
+	        						}
+	        						if(listOfString[j].isEmpty())
+	        						{
+	        							
+	        							listOfString[j].add(String.valueOf(Long.toBinaryString(Long.parseLong(result[j][2])))+" " +value);
+	        			//				System.out.println(result[j][3] + " "+ipToBin(result[j][0])+value + "" +result[j][0].length() + "empty");
+	        						}
+	        						
+	        						
+	        						
+	        							else
+	        							{
+	        								listOfString[j].add(String.valueOf(Long.toBinaryString(Long.parseLong(result[j][2])))+" " +value);
+	        							}
+	        							greater = 0;
+	        							kval = 0;
+	        						
+	        					}
+	        			}
+	        			
+	        			
+	        		
+	        	}}
+			}
+	        System.out.println("Size of file" + listOfString[0].size());
+	        System.out.println("Size of total= " + Total.size());
+			int [] mapArray = new int[ports.size()];
+			int x=0;
+	        Iterator it = ports.entrySet().iterator();
+	        while (it.hasNext()) {
+	            Map.Entry pair = (Map.Entry)it.next();
+	            mapArray[x] = (int) pair.getValue();
+	          System.out.println(pair.getKey() + " = " + pair.getValue());
+	            x++;
+	            it.remove(); // avoids a ConcurrentModificationException
+	        }
+		
+			    //System.out.println(mapArray.length);
+		    ArrayList<Integer> temp1[] = new ArrayList[mapArray.length];
+		   // System.out.println(ports.size()+ "Size of port");
+		    
+		    String temp = "" ;
+		    String res1[] = new String[2];
+		    //System.out.println(mapArray.length);
+		    for(int i = 0 ; i < mapArray.length; i++)
+		    {
+		    	//System.out.println(mapArray[i]+ "MAP ARRAY VALS");
+		    }
+		   //System.out.println("Size of maparray"+ mapArray.length);
+		    for(int k = 0; k < sizeOfFile;k++)
+		    {
+		    	
+		    	for(int j = 0 ; j < mapArray.length;j++)
+		    	{	
+		   // 		System.out.println(mapArray.length+ "map array length");
+		    	//	temp1[j]= new ArrayList<Integer>();
+		    //		System.out.println("outside i" + j);
+		    		for(int i = 0; i < listOfString[k].size(); i++)
+		    		{
+		    	//		System.out.println("inside i" + i);
+		        		res1 = listOfString[k].get(i).split("\\s+");
+
+		    			
+		    		//	System.out.println(res1[0]+ " vals" );
+		    			String vals = res1[0];
+
+		    			
+		    			
+		    			if((vals).endsWith(Integer.toString(mapArray[j])))
+		    			{	      
+		    			//	System.out.println("vals inside" + vals);
+		    					//if(vals.equals("000000000"))
+		    				//		System.out.println(vals);
+		    					temp = vals.substring(0,24);
+		    				//System.out.println(Integer.parseInt(temp,2) + "PARSED");
+		    				
+				    		temp1[j]= new ArrayList<Integer>();
+
+		    				temp1[j].add(Integer.parseInt(temp,2));
+		    				//System.out.println(temp1[j].size() + "SIZE TEST of" + j);
+		    			//	System.out.println(mapArray[j]);
+		    		                         
+		    			}
+		    			//temp ="";
+		    				
+		    		}
+		    		
+		    	}
+		    	
+		    }
+		    
+		    //System.out.println(temp1[0].size() + "Size outside loop");
+		    String[] naiveString = new String[mapArray.length];
+		    for(int i =0 ; i < mapArray.length;i++)
+		    {
+		    	naiveString[i]="";
+		    }
+		   MinimizedTable M[]=new MinimizedTable[mapArray.length];
+	//	    System.out.println(temp1[0].size() + "Temp length");
+		    for(int i = 0 ; i < temp1.length;i++)
+		    {
+		    	//System.out.println(temp1[i] +  "Temp1.leen");
+		    }
+		  //  String[][] binaryString = new String[temp1.length][];
+		    for(int i = 0 ; i < temp1.length;i++)
+		    {
+		    	if(temp1[i] == null)
+		    		temp1[i]= new ArrayList<Integer>();
+		    	int[][] finalvals = new int[temp1.length][temp1[i].size()];
+		    	 String[][] binaryString = new String[temp1.length][temp1[i].size()];
+		    	for(int j = 0; j < temp1[i].size();j++)
+		    	{
+		    		finalvals[i][j]=temp1[i].get(j);
+		    		//System.out.println(Integer.toBinaryString(finalvals[i][j]));
+		    	  		binaryString[i][j]=Integer.toBinaryString(finalvals[i][j]);
+		    	  		System.out.println(binaryString[i][j]);
+		    	  		
+		    		
+		    	  		for(int k=0;k<binaryString[i][j].length();k++)
+		    	  		{
+		    	  			if(binaryString[i][j].charAt(k)=='1')
+		    	  			{
+		    	  				char newstuff="abcdefghijklmnopqrstuvwxyz".charAt(k);
+		    	  				naiveString[i]=naiveString[i] + newstuff;
+		    	  				
+
+
+		    	  			}
+		    	  		}
+		    	  	APs.add(naiveString[i]);
+		    	}
+		    
+		    
+    	  		
+
+		   //System.out.println(temp1[0].length);
+		   
+		    //System.out.println(temp1.length + "temp1.length");
+		 	//System.out.println("Temp1["+i+"] = " + temp1[i]);
+	// M[i] = new MinimizedTable(finalvals[i]);
+	 //	System.out.println("Minimized: " + M[i].toString());
+		   
+		    }
+		    temp ap1 = new temp();
+		    temp ap[] = new temp[temp1.length];
+		//  for(int i =0;i<temp1.length;i++)
+		    {
+		 //   	ap[i] = new temp(M[i].toString());
+		    }
+		  //  for(int j = 0 ; j < sizeOfFile;j++)
+		    {
+		    //	if(redist[j]==null)
+		   	//	continue;
+		    	//else
+		    		
+		    	//	ap1.routeRedistribute(mapArray, ports, sizeOfFile, redist);
+		   }
+		  
+		   ap1.callImplement();
+		    long c2 = System.currentTimeMillis();
+		    System.out.println("time in ms:" + (c2-c1));
+
+		  //  System.out.println(sizeOfFile);
+		    
+		    
+		}
+	}
+
+
+
+
+
