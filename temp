@@ -533,7 +533,7 @@
 		@SuppressWarnings("null")
 		public static void main(String[] Args) throws UnknownHostException, IOException
 		{
-			topology("config1596","config1352");
+			topology("config1","config2");
 			long c1 = System.currentTimeMillis();
 			int sizeOfFile = new File("./src/final_configs/").listFiles().length;
 			System.out.println(sizeOfFile);
