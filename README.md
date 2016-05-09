@@ -27,6 +27,7 @@ and the output of that is put into our ./src/ folder.
  7- To use fast bitvector intersections, first run the java file (it will write into a .txt file), after that run the C file (it requires Intel AVX installed)  using the commands -
  
  compiler command: gcc -mavx2 -o set_intersect_union set_intersect_union.c
+ 
  run command: ./set_intersect_union.c
 
 
