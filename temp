@@ -447,7 +447,7 @@ import java.io.FileNotFoundException;
 		public static void topology(String begin, String end) throws IOException
 		{
 			 
-			BufferedReader br = new BufferedReader(new FileReader("./src/topology_purdue2.txt"));
+			BufferedReader br = new BufferedReader(new FileReader("./src/topology.txt"));
 
 		    StringBuilder sb = new StringBuilder();
 		    String line = br.readLine();
@@ -533,7 +533,7 @@ import java.io.FileNotFoundException;
 		@SuppressWarnings("null")
 		public static void main(String[] Args) throws UnknownHostException, IOException
 		{
-			topology("config1596","config1352");
+			topology("configX","configY");
 			long c1 = System.currentTimeMillis();
 			int sizeOfFile = new File("./src/final_configs/").listFiles().length;
 			System.out.println(sizeOfFile);
