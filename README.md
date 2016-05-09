@@ -5,7 +5,7 @@ CAN BE CHANGED WITHOUT MENTION
 *****************************************************************************************************************************
 Steps on running-
 
-1- Import the JDD library from https://bitbucket.org/vahidi/jdd/wiki/Home **Modification functions will be added
+1- Import the JDD library from https://bitbucket.org/vahidi/jdd/wiki/Home 
 
 2- Import the Karnaugh map implementation into the source folder
 
