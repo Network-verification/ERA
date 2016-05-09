@@ -23,5 +23,10 @@ and the output of that is put into our ./src/ folder.
  5- Run the java code using normal java compile/run techniques (javac, java) 
 
  6- The output would be the answer to the query "can A talk to B in this path" -- if yes, BDD would give you the values that make it through, else it would be null.
+ 
+ 7- To use fast bitvector intersections, first run the java file (it will write into a .txt file), after that run the C file (it requires Intel AVX installed)  using the commands -
+ 
+ compiler command: gcc -mavx2 -o set_intersect_union set_intersect_union.c
+ run command: ./set_intersect_union.c
 
 
