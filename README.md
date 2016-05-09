@@ -13,8 +13,6 @@ Steps on running-
 
 Explanation: Path - This denotes the different "unique" port numbers assigned to each of the output ports of the routers that come in the path "A->B"
 
-**TODO** ADD automated steps for the path
-
 Topology - This is the overall topology of the network which includes all links
 
 configs - First, we parse the configs using Batfish https://github.com/arifogel/batfish
