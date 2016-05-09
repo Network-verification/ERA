@@ -6,14 +6,14 @@
 	import java.net.UnknownHostException;
 	import java.util.ArrayList;
 	import java.util.Arrays;
-	import java.util.HashMap;
-	import java.util.Iterator;
-	import java.util.List;
-	import java.util.Map;
-	import java.util.Map.Entry;
-	import java.io.BufferedReader;
-	import java.io.File;
-	import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 	import java.io.FileReader;
 	import java.io.IOException;
 	import java.lang.*;
@@ -447,7 +447,7 @@
 		public static void topology(String begin, String end) throws IOException
 		{
 			 
-			BufferedReader br = new BufferedReader(new FileReader("./src/topology.txt"));
+			BufferedReader br = new BufferedReader(new FileReader("./src/topology_purdue2.txt"));
 
 		    StringBuilder sb = new StringBuilder();
 		    String line = br.readLine();
@@ -533,7 +533,7 @@
 		@SuppressWarnings("null")
 		public static void main(String[] Args) throws UnknownHostException, IOException
 		{
-			topology("config1","config2");
+			topology("config1596","config1352");
 			long c1 = System.currentTimeMillis();
 			int sizeOfFile = new File("./src/final_configs/").listFiles().length;
 			System.out.println(sizeOfFile);
@@ -792,10 +792,10 @@
 
 		   //System.out.println(temp1[0].length);
 		   
-		    //System.out.println(temp1.length + "temp1.length");
-		 	//System.out.println("Temp1["+i+"] = " + temp1[i]);
-	// M[i] = new MinimizedTable(finalvals[i]);
-	 //	System.out.println("Minimized: " + M[i].toString());
+		   System.out.println(temp1.length + "temp1.length");
+		 	System.out.println("Temp1["+i+"] = " + temp1[i]);
+	 M[i] = new MinimizedTable(finalvals[i]);
+	 	System.out.println("Minimized: " + M[i].toString());
 		   
 		    }
 		    temp ap1 = new temp();
