@@ -1,12 +1,14 @@
-��# ERA
+## ERA
 
 *****************************************************************************************************************************
 CAN BE CHANGED WITHOUT MENTION
 *****************************************************************************************************************************
 ##Steps on running-
 
-1- Import the JDD library from https://bitbucket.org/vahidi/jdd/wiki/Home 
-
+1- Import the JDD library from 
+```
+https://bitbucket.org/vahidi/jdd/wiki/Home 
+````
 2- Import the Karnaugh map implementation into the source folder
 
 3- Use temp.java with changes to 'path', 'topology' and 'configs'.
@@ -18,16 +20,16 @@ Topology - This is the overall topology of the network which includes all links
 configs - First, we parse the configs using Batfish https://github.com/arifogel/batfish
 and the output of that is put into our ./src/ folder.
 
- 4- In main(), insert inputs to the "routerA" and "routerB" that need to be checked in the topology() function call.
+ 4- In ````main()````, insert inputs to the "routerA" and "routerB" that need to be checked in the topology() function call.
 
  5- Run the java code using normal java compile/run techniques (javac, java) 
 
  6- The output would be the answer to the query "can A talk to B in this path" -- if yes, BDD would give you the values that make it through, else it would be null.
  
  7- To use fast bitvector intersections, first run the java file (it will write into a .txt file), after that run the C file (it requires Intel AVX installed)  using the commands -
- 
+ ````
  compiler command: gcc -mavx2 -o set_intersect_union set_intersect_union.c
  
  run command: ./set_intersect_union.c
-
+``````
 
