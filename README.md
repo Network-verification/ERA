@@ -42,7 +42,7 @@ For way pointing, we can specify each interface that is involved in the path fro
 - Format for this would be -
 ````
 <Interface1>,<Interface2>,...<Destination Interface>|<IP prefix> 
-
+````
 ###Router Equivalence
 We specify the two interfaces of both routers that are considered equivalent and specify the prefixes that need to be compared to prove equivalence.
 -Format for this would be -
