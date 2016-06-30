@@ -7,6 +7,7 @@ ERA
 ```
 https://bitbucket.org/vahidi/jdd/wiki/Home 
 ````
+- Install Batfish from ``https://github.com/arifogel/batfish``
 - Import the Karnaugh map implementation into the src folder
 - Put the router configuration files into a folder named ``configs`` along with the ``topology`` files.
 
