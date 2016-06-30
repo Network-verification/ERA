@@ -37,7 +37,7 @@ Interface1,Inteface2|128.16.1.1/29
 Interface1,Interface2|*
 ````
  - For blackhole, it is the same format as well.
-###Way Pointing & Valley Free
+### Way Pointing & Valley Free
 For way pointing, we can specify each interface that is involved in the path from source to destination along with the prefixes that need to be checked.
 - Format for this would be -
 ````
