@@ -39,7 +39,7 @@ Interface1,Interface2|*
 ````
 
 ### Way Pointing & Valley Free
-For way pointing, we can specify each interface that is involved in the path from source to destination along with the prefixes that need to be checked.
+We can specify each interface that is involved in the path from source to destination along with the prefixes that need to be checked.
 - Format for this would be -
 ````
 <Interface1>,<Interface2>,...<Destination Interface>|<IP prefix> 
