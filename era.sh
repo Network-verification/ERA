@@ -1,28 +1,32 @@
 #!/bin/bash
-
-
-start=`date +%s`
+if [ $# -lt 3 ]; then
+  echo 1>&2 "$0: not enough arguments - usage is ./era.sh <path_to_config_folder> <path_to_policy_file> <-s/-v>"
+  exit 2
+elif [ $# -gt 3 ]; then
+  echo 1>&2 "$0: too many arguments"
+  exit 2
+fi
 for file in "$1"configs/*
 do
- echo "Modifications for Batfish --" 
- sed -i '/snmp/d' $file
- sed -i '/pim/d' $file
- sed -i '/monitor/d' $file
- sed -i '/ntp/d' $file
- sed -i '/^end/d' $file
- echo $file 
- cat conf >> $file
+sed -i '/snmp/d' $file
+sed -i '/pim/d' $file
+sed -i '/monitor/d' $file
+sed -i '/ntp/d' $file
+sed -i '/^end/d' $file
+cat conf >> $file
 done
-echo "Running Batfish --" 
-batfish_analyze_multipath $1
-echo "Creating cp_facts --" 
-mkdir cp_facts
+batfish_analyze_multipath $1 &>batfish_out
 
-echo "Run java --" 
-javac -cp jdd_105.jar:Minimize.jar APCSA.java;
+mkdir cp_facts &> rand
+for file in "$1"environments/multipath-default/cp_facts/*
+do
+if [ $(wc -l <$file)  -ge "3" ]
+then
+ cp $file ~/era/cp_facts/
+#fi
+echo `wc -l $file`
+fi
+done
+javac -cp jdd_105.jar:Minimize.jar era_analyser.java;
+java -cp .:jdd_105.jar:Minimize.jar era_analyser $1 $2 $3 $4
 
-java APCSA  -cp jdd_105.jar:Minimize.jar $2 $3 $4 $5
-
-runtime=$((end-start))
-echo $runtime in seconds
-~                                
