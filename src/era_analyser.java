@@ -30,7 +30,7 @@ class WordContainsException extends Exception
          super(message);
       }
  }
-class APCSA extends BDD
+class era_analyser extends BDD
 	{
 		public static int flag_topo = 0;
 		public static String[] topoLines=null;
@@ -46,7 +46,7 @@ class APCSA extends BDD
 		
 		
 		//private static int bdds[];
-		public APCSA(String s)
+		public era_analyser(String s)
 		{
 			super(10000,1000);
 		
@@ -56,7 +56,7 @@ class APCSA extends BDD
 			
 			
 		}
-		public APCSA() {
+		public era_analyser() {
 			super(10000,1000);
 		}
 		public ArrayList<Integer> makeAtomic(int[] finalbdds)//must relate final bdds with port numbers
@@ -337,7 +337,7 @@ class APCSA extends BDD
 	   		   route = route+cost;
 	   		   return route;
 	   	   }
-		public static APCSA modification(List<String> listOfString)
+		public static era_analyser modification(List<String> listOfString)
 		{
 		    int temp1[] = new int[listOfString.size()];
 		    String temp = "" ;
@@ -358,7 +358,7 @@ class APCSA extends BDD
 			    }
 			    MinimizedTable M = new MinimizedTable(temp1);
 		//	    System.out.println("Minimized: " + M.toString());
-			    APCSA ap = new APCSA(M.toString());
+			    era_analyser ap = new era_analyser(M.toString());
 			    return ap;
 			 
 		}
@@ -461,14 +461,14 @@ class APCSA extends BDD
 	 	//System.out.println("Minimized: " + M[i].toString());
 		   
 		    }
-		    APCSA ap[] = new APCSA[temp1.length];
+		    era_analyser ap[] = new era_analyser[temp1.length];
 		    for(int i =0;i<temp1.length;i++)
 		    {
-		    	ap[i] = new APCSA(M[i].toString());
+		    	ap[i] = new era_analyser(M[i].toString());
 		    }
 	//	    return sizeOfFile;
 		}
-		public static APCSA aggregation(List<String> listOfString, String aggregate) // make sure aggregate takes into consideration the prefix
+		public static era_analyser aggregation(List<String> listOfString, String aggregate) // make sure aggregate takes into consideration the prefix
 		{
 		    int temp1[] = new int[listOfString.size()];
 		    String temp = "" ;
@@ -489,7 +489,7 @@ class APCSA extends BDD
 			    }
 			    MinimizedTable M = new MinimizedTable(temp1);
 		//	    System.out.println("Minimized: " + M.toString());
-			    APCSA ap = new APCSA(M.toString());
+			    era_analyser ap = new era_analyser(M.toString());
 			    return ap;
 			 
 		}
@@ -900,11 +900,11 @@ class APCSA extends BDD
 	 
 		   
 		    }
-		    APCSA ap1 = new APCSA();
-		    APCSA ap[] = new APCSA[temp1.length];
+		    era_analyser ap1 = new era_analyser();
+		    era_analyser ap[] = new era_analyser[temp1.length];
 		   for(int i =0;i<temp1.length;i++)
 		    {
-		    	ap[i] = new APCSA(M[i].toString());
+		    	ap[i] = new era_analyser(M[i].toString());
 		    }
 		    for(int j = 0 ; j < sizeOfFile;j++)
 		    {
