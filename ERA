@@ -32,6 +32,7 @@ class WordContainsException extends Exception
  }
 class APCSA extends BDD
 	{
+		public static int flag_topo = 0;
 		public static String[] topoLines=null;
 		public static int flag1 = 0;
 		public static String string1 ;
@@ -50,8 +51,9 @@ class APCSA extends BDD
 			super(10000,1000);
 		
 			APs.add(s);
-			System.out.println("SIZE OF APS" + APs.size());
+		//	System.out.println("SIZE OF APS" + APs.size());
 			//implement(s);
+			
 			
 		}
 		public APCSA() {
@@ -64,6 +66,7 @@ class APCSA extends BDD
 			System.out.println(finalbdds.length + "LENGTH OF FINALBDDS");
 			for(int i = 0; i < finalbdds.length;i++)
 			{
+				
 				atomicbdds[i] = finalbdds[i];
 				natomicbdds[i] = ref(not(finalbdds[i]));
 			}
@@ -128,31 +131,40 @@ class APCSA extends BDD
 			if(flag1==1)
 			{
 				
-				System.out.println("For " + string1 + " and " + string2);
-				System.out.println("final output - Router Equivalence not satisfied");
+				//System.out.println("For " + string1 + " and " + string2);
+			//	System.out.println("final output - Router Equivalence not satisfied");
 			}
 				
 			if(areReachable !=0 && flag1==0)
 			{
 				System.out.println("");
 				//System.out.println("invalid input");
-				print(areReachable);
+			//	print(areReachable);
 			}
 			else if(flag1==0)
-				System.out.println("* inputted");
+			{//	System.out.println("* inputted"); 
+				}
+			
 			else if(flag1==2)
-				System.out.println("Final Output - Reachability is satisfied");
+			
+				{//System.out.println("Final Output - Reachability is satisfied");
+				
+				}
 			else if(flag1==3) 
 			{
-				System.out.println("Final Output - Reachability is satisfied");
+				//System.out.println("Final Output - Reachability is satisfied");
 			}
 			else if(flag1 ==4)
-				System.out.println(" Final Output - Valley Free policy satisfied" );
+				{
+				//System.out.println(" Final Output - Valley Free policy satisfied" );
+				}
 			else if(flag1==6)
-				System.out.println("Not reachable");
+				{
+				//System.out.println("Not reachable");
+				}
 			long end_time = System.currentTimeMillis();
 			long difference = end_time-start_time;
-			System.out.println("THIS IS REACHABLE TIME = " + difference);
+			//System.out.println("THIS IS REACHABLE TIME = " + difference);
 			
 		}
 		public void callImplement()
@@ -166,7 +178,7 @@ class APCSA extends BDD
 		    	if(bdds[i]!=0)
 		    	{
 		    		total.add(i);
-		    		print(bdds[i]);
+		    //		print(bdds[i]);
 		    		 
 		    	//	System.out.println(bdds[i] + " " +  i +  "IN VALS");
 		    		
@@ -175,8 +187,8 @@ class APCSA extends BDD
 		    //	System.out.println(total.size() + " = total size ");
 		    	
 		    }
-		    for(int i = 0; i < total.size();i++)
-		    	System.out.println("total" +total.get(i));
+		  //  for(int i = 0; i < total.size();i++)
+		    	//System.out.println("total" +total.get(i));
 		    
 		    
 		    int[] path = {21,34};
@@ -198,10 +210,10 @@ class APCSA extends BDD
 				I_P[i] = createVar();
 			}
 			
-			System.out.println(s+ " String s ");
+	//		System.out.println(s+ " String s ");
 			s=s.replaceAll("\\s","");
 			int countOrs = s.length() - s.replace("+", "").length();
-			System.out.println(countOrs + "Countors");
+	//		System.out.println(countOrs + "Countors");
 			int temp[] = new int[countOrs+1];
 			int flag  = 0;
 		    if(countOrs == 0)
@@ -243,9 +255,9 @@ class APCSA extends BDD
 				}
 				temp[i]=I_P[val.charAt(0)-97];
 				
-				System.out.println(I_P[0] + "this is temp["+i+ "]");
+			//	System.out.println(I_P[0] + "this is temp["+i+ "]");
 			    for(int j = 0 ; j < val.length() ; j++) { 
-			    	System.out.println("value of j = " + j + "val.length()" + val.length());
+			    	//System.out.println("value of j = " + j + "val.length()" + val.length());
 			        if(j == val.length()-1 && val.charAt(j)!='\'') {
 			            temp[i] = ref(and(temp[i],I_P[val.charAt(j)-97]));
 			            break;
@@ -253,14 +265,14 @@ class APCSA extends BDD
 			        else if(j == val.length()-2 && flag == 1)
 			        {
 			        	temp[i] = ref(not(temp[i]));
-			        	System.out.println(temp[i] + "result supposed");
+			        //	System.out.println(temp[i] + "result supposed");
 			        	break;
 			        }
 			        else if(j==val.length()-1)
 			        {
 			        	temp[i] = ref(and(temp[i], not(I_P[val.charAt(j-1)-97])));
-			        	System.out.println(temp[i]+ "result supposed");
-			        	print(temp[i]);
+			        	//System.out.println(temp[i]+ "result supposed");
+		//	        	print(temp[i]);
 			        	break;
 			        }
 
@@ -293,7 +305,7 @@ class APCSA extends BDD
 			    }
 			}
 			int finalbdd= temp[0];
-			System.out.println(temp.length + "temp length in ");
+		//	System.out.println(temp.length + "temp length in ");
 			for(int i = 1 ; i <=countOrs; i++)
 			{
 				if(temp.length == 1)
@@ -302,8 +314,9 @@ class APCSA extends BDD
 				deref(temp[i]);
 					
 			}
-			System.out.println("final bdd");
-		print(finalbdd);
+		//
+		//	System.out.println("final bdd");
+		//print(finalbdd);
 		return finalbdd;
 			
 		}
@@ -317,6 +330,10 @@ class APCSA extends BDD
 	   			   route = route+"1";
 	   		   else if(result == "OSPF")
 	   			   route = route+ "2";
+	   		   else if(result == "RIP")
+	   			   route = route+"3";
+	   		   else if(result=="EIGRP")
+	   			   route = route+"4";
 	   		   route = route+cost;
 	   		   return route;
 	   	   }
@@ -347,10 +364,7 @@ class APCSA extends BDD
 		}
 		public void routeRedistribute(int[] mapArray, Map ports,int sizeOfFile,ArrayList<String>[] listOfString)// new proto is just n bits, old is the entire thing
 		{
-			
-			
 			//trial begins here
-			
 			//int [] mapArray = new int[ports.size()];
 			int x=0;
 	        Iterator it = ports.entrySet().iterator();
@@ -494,11 +508,11 @@ class APCSA extends BDD
 	            return bStringBuilder.toString();
 	     }
 		@SuppressWarnings("unchecked")
-		public static void topology(String begin, String end) throws IOException
+		public static void topology(String begin, String end,String topo1) throws IOException
 		{
 			 
-			BufferedReader br = new BufferedReader(new FileReader("./src/way_pointing.txt"));
-			String middleConf =  "config4";
+			BufferedReader br = new BufferedReader(new FileReader(topo1));
+			
 		    StringBuilder sb = new StringBuilder();
 		    String line = br.readLine();
 
@@ -512,47 +526,47 @@ class APCSA extends BDD
 			
 			ArrayList<String> containstopo = new ArrayList<String>();
 			topoLines = everything.split(System.getProperty("line.separator"));
-			//System.out.println(topoLines[1]);
+			//System.out.println(topoLines[1] + "topoLines[1]");
 			HashMap<String, ArrayList> topo = new HashMap<String, ArrayList>();
 	        String[] result = new String[2] ;
-	       // ArrayList<String> map = new ArrayList<String>();
+	        ArrayList<String> keys = new ArrayList<String>();
+	       //ArrayList<String> map = new ArrayList<String>();
 			for(int i = 0 ; i < topoLines.length; i++)
 			{
-				result=topoLines[i].split("\\s+");
+				result = topoLines[i].split("\\s+");
 				//System.out.println(result[0]);
 				if(topo.isEmpty())
 				{
 					ArrayList<String> map = new ArrayList<String>();
 					map.add(result[1]);
 					topo.put(result[0], map);
+					keys.add(result[0]);
 				}
-				if(topo.containsKey(result[0]))
+				else if(topo.containsKey(result[0]))
 				{
 					containstopo = topo.get(result[0]);
 					containstopo.add(result[1]);
 					topo.put(result[0],containstopo);
+					keys.add(result[0]);
 				}
 				else
 				{
 					ArrayList<String> map = new ArrayList<String>();
 					map.add(result[1]);
 					topo.put(result[0], map);
+					keys.add(result[0]);
 				}
 			}
-			if(begin.equals("config1"))
-			{
-				//	System.out.println( "Checking configs of - " + begin + "-> " + middleConf+  "->" + end);
 			
-			}
-		  
 		    ArrayList<String> map = new ArrayList<String>();
-		    map = topo.get(begin);
-		    //System.out.println(topo.size() + "topo size");
+		   
+		
+		 map = topo.get(begin);
+		 
 		    for(int i =0; i < map.size();i++)
 		    {
 		    	if(end.equals(map.get(i)))
 		    	{
-		 //   		System.out.println("REACHABLE (TOPO)");
 		    		break;
 		    	}
 		    	else
@@ -564,22 +578,26 @@ class APCSA extends BDD
 		public static void checkMap(HashMap<String, ArrayList> topo, String key, String end)
 		{
 			int flag = 0;
+			
 			ArrayList<String> map = new ArrayList<String>();
 			map =  topo.get(key);
 			for(int i =0 ; i < map.size();i++){
 				if(end.equals(map.get(i)))
 				{
-				//	System.out.println("REACHABLE (TOPO)");
-					flag = 1;
+					
+				//	System.out.println("Topology is reachable");
+					flag_topo= 1;
 					break;
 				}
 				else
-					continue;
+					checkMap(topo,map.get(i),end);
 			}
-		//	if(flag ==0)
-		//	System.out.println("NOT REACHABLE (TOPO)");
-			
-			
+		if(flag_topo ==0)
+		{
+			System.out.println("Not reachable through topology");
+			System.exit(1);
+		}
+			return;
 		}
 			
 		
@@ -588,37 +606,104 @@ class APCSA extends BDD
 		public static void main(String[] Args) throws UnknownHostException, IOException
 		{
 			
-			topology("config1","config3");
+
+
 			long c1 = System.currentTimeMillis();
-			string1 = "core0";
-			string2 = "core255";
-			
-			
-			int sizeOfFile = new File("./src/way_pointing_configs/").listFiles().length;
 			//System.out.println(sizeOfFile);
 			Map<String,Integer> ports = new HashMap<String, Integer>();
 			int portVal = 0;
-		    ArrayList<String> listOfString[] = new ArrayList[sizeOfFile];
 		 //reading in the routers
 		    int lineNo=0;
-			String[][] lines = new String[sizeOfFile][];
+		    String[] wrapperL;
+		    String Args3;
+		    String Args2;
+			BufferedReader br = new BufferedReader(new FileReader(Args[1]));
+			try {
+			    StringBuilder sb = new StringBuilder();
+			    String line = br.readLine();
+
+			    while (line != null) {
+			        sb.append(line);
+			        sb.append(System.lineSeparator());
+			        line = br.readLine();
+			   }
+			    String everything = sb.toString();
+				 wrapperL = everything.split(System.getProperty("line.separator"));
+			} finally {
+			    br.close();
+			}
+
+			String configs=Args[0];
+			String topo="";
+			ArrayList<String> policy_id = new ArrayList<String>();
+			ArrayList<String> policy_type = new ArrayList<String>();
+			ArrayList<String> metadata = new ArrayList<String>();
+			String[] policy = new String[2];
+			for(int x = 0; x < wrapperL.length;x++)
+			{
+        		 policy= wrapperL[x].split("\\:");
+        		//System.out.println(policy[0]);
+        		 
+        		 
+        		 if(policy[0].equals("topology"))
+        			 topo = policy[1];
+        		 else if(policy[0].equals("policy_id"))
+        			 policy_id.add(policy[1]);
+        		 else if(policy[0].equals("policy_type"))
+        			 policy_type.add(policy[1]);
+        		 else if(policy[0].equals("policy_metadata"))
+        			 metadata.add(policy[1]);
+        		 else 
+        			 continue;
+			}
+			 
+			//topology(topo);
 			
-			String direct = Args[2];
-		    String target_dir = "./src/way_pointing_configs/";
+		String direct;
+        	for(int w =0 ; w < policy_id.size();w++)
+			{
+			      
+
+	
+					Args2 = "./demo/" +policy_type.get(w)+"_configs/";
+				int sizeOfFile = new File(Args2).listFiles().length;
+					Args3 = metadata.get(w);
+					
+		   File[] len;
+			configs = Args2;
+                        len= new File(configs).listFiles();
+                        if(len ==  null)
+                        {
+                                System.out.println("Error: Configuration files missing.");
+                                System.exit(1);
+                        }
+
+
+ String[][] lines = new String[sizeOfFile][];
+                    ArrayList<String> listOfString[] = new ArrayList[sizeOfFile];
+
+
+		//	System.out.println("This is metadata " + Args3);	
+			
+		 direct = policy_type.get(w);
+			//System.out.println("wrapperL" + policy_type.get(w));
+		    String target_dir = configs;
 	        File dir = new File(target_dir);
 	        File[] files = dir.listFiles();
 	        String everything = "";
-	        for (File f : files) {
+	        if(files == null)
+	        {
+	        	System.out.println("Error:configuration path incorrect");
+	        	System.exit(1);
+	        }
+	        for(File f : files) {
 	            if(f.isFile()) {
 	                BufferedReader inputStream = null;
-
-	                
-	                    inputStream = new BufferedReader(
+	                inputStream = new BufferedReader(
 	                                    new FileReader(f));
-	                    
-	                    StringBuilder sb = new StringBuilder();
-	        		    String line1 = inputStream.readLine();
-	                    while ((line1 ) != null) {
+	                StringBuilder sb = new StringBuilder();
+	        		String line1 = inputStream.readLine();
+	                while ((line1 ) != null) {
 	                    	sb.append(line1);
 	        		        sb.append(System.lineSeparator());
 	        		        line1 = inputStream.readLine();
@@ -630,56 +715,55 @@ class APCSA extends BDD
 	                    if (inputStream != null) {
 	                        inputStream.close();
 	                    }
-	                
-	    			lines[lineNo] = everything.split(System.getProperty("line.separator"));
-	   
+	                //System.out.println("everything" + everything);
+	                if( (everything.split(System.getProperty("line.separator")))== null )  
+	                	System.exit(1);
+	             
+	       // System.out.println(everything);
+	        
+	                	lines[lineNo] = everything.split(System.getProperty("line.separator"));
+	                   
+	        
+	                	
 	    			lineNo++;
 	            }
 	        }
-	        if(direct.equals("equivalence"))
-	        	flag1 = 1;
+	        System.out.println("");
+	        lineNo = 0;
+	      //  System.out.println("direct = "+ direct );
+	        if(direct.equals("router_equivalence"))
+	        	{ flag1 = 1; //System.out.println("im in");
+	        	
+	        	}
 	        else if(direct.equals("way_pointing")||direct.equals("reachability"))
 	        	flag1=3;
 		else if(direct.equals("valley_free"))
 			flag1=4;
-		
-//System.out.println(flag1+ "flag1");
-	        	// System.out.println(lineNo + "lines 1");
-	        String[][] result = new String[sizeOfFile][];
-	        
-	        for(int j=0;j<sizeOfFile;j++)
-			{
-	        	listOfString[j]=new ArrayList<String>();
-	        //System.out.print(lines[j].length + "lines");
-	        	for(int i = 0; i < lines[j].length;i++)
-	        	{
-	        		//System.out.println(lines[j].length + "there");
-	        		result[j] = lines[j][i].split("\\|");
-	        		//System.out.println("val of j" + j);
-	    //    	System.out.println(ipToBin(result[j][1]));
-	        		if(lines[j].length==1)
-	        			//break;
-	        	//	System.out.println("j2" + result[j][2]);
-	        		if((result[j][1].compareTo("drop")==0) || (result[j][1].compareTo("receive")==0) || (result[j][1].compareTo("attached")==0)||result[j].length==2)
+		String[][] result = new String[sizeOfFile][];
+	    for(int j=0;j<sizeOfFile;j++)
+		{
+	        listOfString[j]=new ArrayList<String>();
+	        if(lines[j] == null)
+	        {
+	        	System.out.println("Error: configs folder not valid");
+	        	System.exit(1);
+	        }
+	        for(int i = 0; i < lines[j].length;i++)
+	        {
+	        	result[j] = lines[j][i].split("\\|");
+    			//System.out.println("resul[j][0] is = " + result[j][0] + " result[j][1]=" + result[j][1] + " result[j][2]="+result[j][2]+ " result[j][3] = " + result[j][3]);
+
+	        	//if(lines[j].length==1)
+	        	if((result[j][1].compareTo("drop")==0) || (result[j][1].compareTo("receive")==0) || (result[j][1].compareTo("attached")==0)||result[j].length==2)
 	        			continue;
-	        		//if(ports.isEmpty())
-	        			//{ports.put(result[j][1], portVal);
-	        			//System.out.println("result is "+ result[j][1] + " port val is " + portVal + " result[j][2] is" + result[j][2]);
-	        			
-	        		//portVal++;}
-	        	
-	        		else if(ports.get(result[j][0]+result[j][1]) == null)
-	        		{
+	        	else if(ports.get(result[j][0]+result[j][1]) == null)
+	        	{
 	        		//	System.out.println("resul[j][0] is = " + result[j][0] + " result[j][1]=" + result[j][1] + " result[j][2]="+result[j][2]+ " result[j][3] = " + result[j][3]);
 	        			ports.put(result[j][0]+result[j][1], portVal);
 	        			portVal++;
-	        		}
-
-	        		
-	        //	System.out.println("Size of ports" + ports.size());
 	        	}
-			}
-	        //System.out.println("Size of ports"+ ports.size());
+	        }
+		}
 	        @SuppressWarnings("unchecked")
 			ArrayList<String>[] redist = new ArrayList[sizeOfFile];
 	        ArrayList<Integer> Total  = new ArrayList<Integer>();
@@ -710,8 +794,8 @@ class APCSA extends BDD
 	        						flag = 0;
 	        						if((result[j].length==5)&&result[j][4].equals("redistribute"))
 	        						{
-        							 redist[j] = new ArrayList<String>();
-	        							redist[j].add(String.valueOf(Long.toBinaryString(Long.parseLong(result[j][2])))+" "+value);
+        		     					redist[j] = new ArrayList<String>();
+	             						redist[j].add(String.valueOf(Long.toBinaryString(Long.parseLong(result[j][2])))+" "+value);
         								listOfString[j].add(String.valueOf(Long.toBinaryString(Long.parseLong(result[j][2])))+" "+value);	
 	        						}
 	        						if(listOfString[j].isEmpty())
@@ -731,15 +815,14 @@ class APCSA extends BDD
 	        		
 	        	}}
 			}
-	        //System.out.println("Size of file" + listOfString[0].size());
-	        //System.out.println("Size of total= " + Total.size());
+	        
 			int [] mapArray = new int[ports.size()];
 			int x=0;
 	        Iterator it = ports.entrySet().iterator();
 	        while (it.hasNext()) {
 	            Map.Entry pair = (Map.Entry)it.next();
 	            mapArray[x] = (int) pair.getValue();
-	          //System.out.println(pair.getKey() + " = " + pair.getValue());
+	     //     System.out.println(pair.getKey() + " = " + pair.getValue());
 	            x++;
 	            it.remove(); 
 	        }
@@ -752,7 +835,7 @@ class APCSA extends BDD
 		    String res1[] = new String[2];
 		    for(int i = 0 ; i < mapArray.length; i++)
 		    {
-		    	//System.out.println(mapArray[i]+ "MAP ARRAY VALS");
+		  //  	System.out.println(mapArray[i]+ "MAP ARRAY VALS");
 		    }
 		   //System.out.println("Size of maparray"+ mapArray.length);
 		    for(int k = 0; k < sizeOfFile;k++)
@@ -769,19 +852,15 @@ class APCSA extends BDD
 		        		res1 = listOfString[k].get(i).split("\\s+");
 
 		    			
-		    		//	System.out.println(res1[0]+ " vals" );
+		    			//System.out.println(res1[0]+ " vals" );
 		    			String vals = res1[0];
 
 		    			
 		    			
 		    			if((vals).endsWith(Integer.toString(mapArray[j])))
 		    			{	      
-		    			//	System.out.println("vals inside" + vals);
-		    					//if(vals.equals("000000000"))
-		    				//		System.out.println(vals);
+		    			
 		    					temp = vals.substring(0,24);
-		    				//System.out.println(Integer.parseInt(temp,2) + "PARSED");
-		    				
 				    		temp1[j]= new ArrayList<Integer>();
 
 		    				temp1[j].add(Integer.parseInt(temp,2));
@@ -799,6 +878,8 @@ class APCSA extends BDD
 		    
 		    //System.out.println(temp1[0].size() + "Size outside loop");
 		    
+		    
+		   
 		   MinimizedTable M[]=new MinimizedTable[mapArray.length];
 	//	    System.out.println(temp1[0].size() + "Temp length");
 		    for(int i = 0 ; i < temp1.length;i++)
@@ -815,20 +896,13 @@ class APCSA extends BDD
 		    		finalvals[i][j]=temp1[i].get(j);
 		    		
 		    	}
-		    
-		
-		   
-		   //System.out.println(temp1[0].length);
-		   
-		    //System.out.println(temp1.length + "temp1.length");
-		 	//System.out.println("Temp1["+i+"] = " + temp1[i]);
-	M[i] = new MinimizedTable(finalvals[i]);
-	 //	System.out.println("Minimized: " + M[i].toString());
+	        M[i] = new MinimizedTable(finalvals[i]);
+	 
 		   
 		    }
 		    APCSA ap1 = new APCSA();
 		    APCSA ap[] = new APCSA[temp1.length];
-		  for(int i =0;i<temp1.length;i++)
+		   for(int i =0;i<temp1.length;i++)
 		    {
 		    	ap[i] = new APCSA(M[i].toString());
 		    }
@@ -842,24 +916,30 @@ class APCSA extends BDD
 		   }
 		    int lineNo1=0;
 		    //String e = "TOO MANY ARGS";
-			int sizeOfFile1 = new File("./src/" + Args[3] + "/").listFiles().length;
+		    
+	//		int sizeOfFile1 = new File(Args3).listFiles().length;
 
 					String[][] lines1 = new String[1][];
 					
-					//String direct = "way_pointing_configs";
-				
-				//	System.out.println(sizeOfFile1 + "sizeOfFile1");
-				String target_dir1 = "./src/"+ Args[3]+"/";
+					//  String direct = "way_pointing_configs";
+					//	System.out.println(sizeOfFile1 + "sizeOfFile1");
+				String target_dir1 = Args3;
+				//System.out.println("ARgs3"+ Args3);
 			        File dir1 = new File(target_dir1);
-			        File[] files1 = dir1.listFiles();
+			        String Arg5 = "" ;
+			        //System.out.println("Args[3]"+ Args[3]);
+			      //  if(Args[3].equals("-v"))
+			        	 Arg5 = Args[2];
+			      // System.out.println("ARGS5"+ Arg5);
+			        File files1 = dir1;
 			        String everything1 = "";
-			        for (File f1 : files1) {
-			            if(f1.isFile()) {
+			       // for (File f1 : files1) {
+			            if(files1.isFile()) {
 			                BufferedReader inputStream = null;
 
 			                
 			                    inputStream = new BufferedReader(
-			                                    new FileReader(f1));
+			                                    new FileReader(files1));
 			                    
 			                    StringBuilder sb = new StringBuilder();
 			        		    String line1 = inputStream.readLine();
@@ -872,28 +952,50 @@ class APCSA extends BDD
 			                   //  System.out.println(everything1 + "everything1");
 			                }
 			                
-			                    if (inputStream != null) {
+			                    if(inputStream != null) {
 			                        inputStream.close();
 			                    }
-			                
+			                if(lineNo1==1)
+			                {
+			                	System.out.println("Error: Metadata folder incorrect");
+			                	System.exit(1);
+			                }
 			    			lines1[lineNo1] = everything1.split(System.getProperty("line.separator"));
 			    			//System.out.println(lines1[lineNo1] + "lines1");
 			  			lineNo1++;
+			         
 			            }
-			        }
+			       // }
+			       //     System.out.println(lines1[0][1] + "lines1");
+			            if(policy_type.get(w).equals("basic_reachability"))
+			            {
+			            	for(int k = 0; k < lines1[0].length; k++)
+			            	{
+			            		//	System.out.println(lineNo1 + "line!");
+			            		String[] path = new String[2];
+			            		path=lines1[0][k].split("\\|");
+			            		//System.out.println("I'm called");
+			            		String src="";
+			            		String dst="";
+			            		src = path[0].substring(0, path[0].indexOf(",", 0));
+			            		dst = path[0].substring(path[0].lastIndexOf(",") + 1, path[0].length());
+			            		topology(src,dst,topo);
+			            		
+			            	}
+			            
+			            }
 			   //     System.out.println(Args[2] + "Args[2]");
 	int trigger = 0;
 	int t1 = 0;
 	ArrayList<String> nonIncluded = new ArrayList<String>();
 	String result1[][] = new String[1][];
-		if(flag1==3||flag1==4)	    
+		if((flag1==3||flag1==4) && Arg5.equals("-v"))	    
 	{	for(int j=0;j<sizeOfFile;j++)
 		 			{
-		 	        	
 		 	        	for(int i = 0; i < lines[j].length;i++)
 		 	        	{
-					for(int k = 0; k < lines1[0].length;k++)
-		 	        	{//System.out.println(lines1[k].length + "there");
+		 	        		for(int k = 0; k < lines1[0].length;k++)
+		 	        	{//System.out.println(lines1[0].length + "there");
 						try{result1[0] = lines1[0][k].split("\\|");
 						result[j] = lines[j][i].split("\\|");
 		 	        	long ip = Long.parseLong(result[j][2]);
@@ -903,14 +1005,11 @@ class APCSA extends BDD
 		 	        				         (ip >> 8 & 0xff),             
 		 	        				         (ip >> 16 & 0xff),    
 		 	        				         (ip >> 24 & 0xff));
-		 	        	//	System.out.println("result[0][1]" + result1[0][1]);
 						if(result1[0][1].equals(ipStr+"/"+result[j][3]))
 						{
-		 	  //     			System.out.println(ipStr+"/"+result[j][3] + "IM IN");
 		 	        			trigger = 1;
 		 	        			t1=1;
 						}
-			//			System.out.println(t1);
 		 	        	if(result1[0].length!=2)
 		 	        		throw new WordContainsException();}
 					catch(WordContainsException e)
@@ -935,8 +1034,8 @@ class APCSA extends BDD
     		int t = 0;
     		for(int z = 0 ; z < nonIncluded.size();z++)
     		{
-    			if(result1[0][1].equals(nonIncluded.get(z)))
-    				t=1;}
+    			if((result1[0][0]+"|"+result1[0][1]).equals(nonIncluded.get(z))){
+    				t=1;}}
     		if(t==0)
     			nonIncluded.add(result1[0][0]+"|"+result1[0][1]);
     	
@@ -947,61 +1046,97 @@ class APCSA extends BDD
      		
  			flag1=6;
 	}	}
-	else if(flag1!=5)
+	else if(flag1==1 && Arg5.equals("-v"))
 	{
 		for(int j = 0; j < sizeOfFile;j++)
 		{
+			if(j%2 == 0)
+				System.out.println("The route prefixes that are part of core0 but not core255 are:");
+			else
+				{
+					System.out.println("");
+					System.out.println("The route prefixes that are part of core255 but not core0 are:");
+				}
 			for(int i = 0 ; i < lines[j].length;i++)
 			{
-			//	try{
+
 				result[j] = lines[j][i].split("\\|");
 				long ip = Long.parseLong(result[j][2]);
 				String ipStr = 	String.format("%d.%d.%d.%d",(ip & 0xff), (ip >> 8 & 0xff), (ip >> 16 &0xff), (ip >> 24 & 0xff));
 				System.out.println(ipStr+"/"+result[j][3] );
-			///	if(result1[j].length!=2)
-		//			throw new WordContainsException();}
-				
-		//	catch(WordContainsException e){
-	//			System.out.println("The format is incorrect");
-	//		}
-		}
+			}
 		}}
-	else
+	else if(Arg5.equals("-v") && !policy_type.get(w).equals("loops"))
 	{
-		for(int j = 0 ; j < sizeOfFile;j++)
+		System.out.println("Prefixes that survive are: ");
+	for(int j = 0 ; j < sizeOfFile;j++)
 		{
-			for(int i = 0 ; i < lines[j].length;i++)
+			for(int i = 1 ; i < 4;i++)
 			{
-				result[j] = lines[j][i].split("\\|");
+			
+			 	result[j] = lines[j][i].split("\\|");
 				long ip = Long.parseLong(result[j][2]);
 				String ipStr = 	String.format("%d.%d.%d.%d",(ip & 0xff), (ip >> 8 & 0xff), (ip >> 16 &0xff), (ip >> 24 & 0xff));
 				System.out.println(ipStr+"/"+result[j][3]);
+				
 			}
 		}
 		
 	}
-	
+	    if(policy_type.get(w).equals("loops"))
+	    {
+	    	System.out.println("======================");
+	    	System.out.println("Report:");
+	    	System.out.println("Policy = " + policy_type.get(w));
+	    	System.out.println("Result = Loops detected ");
+	    	if(Arg5.equals("-v"))
+			{
+
+			}
+	    	
+	    	System.out.println("======================");
+
+	    	
+	    }
 		   ap1.callImplement();
 		    long c2 = System.currentTimeMillis();
-		    System.out.println("time in ms:" + (c2-c1));
+		    System.out.println("time to run ERA"
+		    		+ ": " + (c2-c1) +  " ms");
 		 //   for(int i =0; i < vals.length;i++)
 		//    {
 		    	//System.out.println(i+ " = "+ vals[i] );
 		//    }
 
-		  //  System.out.println(sizeOfFile);
+		    if(!policy_type.get(w).equals("loops"))
+		    {//  System.out.println(sizeOfFile);
+		    	
+	    	System.out.println("======================");
+	    	System.out.println("Report:");
+	    	System.out.println("Policy = " + policy_type.get(w));
 		    if(!nonIncluded.isEmpty())
 			{
+		    	System.out.println("Result = Violations detected ");
 				System.out.println("The violations are: ");
+				
 				for(int i = 0; i < nonIncluded.size();i++)
 				{
-					System.out.println(nonIncluded.get(i));
+					String[] output = new String[2];
+					output = nonIncluded.get(i).split(":");
+					String[] output1 = new String[2];
+					output1 = output[1].split("\\|");
+					System.out.println("Interfaces:" + output1[0] + " with prefix:" + output1[1] );
 				}
 			}	
-		  //  if(Args[2].equals("reachibility*"))
-		    else if(flag1!=1||!Args[2].equals("reachibility*"))
-		    	System.out.println("No violations");
-	}
-				
-}
+		    else if(flag1 == 0)
+		    	System.out.println("Result = Reachable prefixes found");
+		    else if(!Arg5.equals("-v"))
+		    	System.out.println("Result = Violations detected");
 
+		    System.out.println("======================");
+		  //  if(Args[2].equals("reachability*"))
+		   // else if(flag1!=1||!Args[2].equals("reachability*"))
+		    //	System.out.println("No violations");
+		    }
+	}
+		}			
+}
