@@ -63,7 +63,7 @@ class era_analyser extends BDD
 		{
 			int atomicbdds[] = new int [finalbdds.length];
 			int natomicbdds[] = new int[finalbdds.length];
-			System.out.println(finalbdds.length + "LENGTH OF FINALBDDS");
+		
 			for(int i = 0; i < finalbdds.length;i++)
 			{
 				
@@ -72,7 +72,7 @@ class era_analyser extends BDD
 			}
 			int[][] interimABDD = new int[2*finalbdds.length][2]; 
 			
-			for(int i = 0 ; i < finalbdds.length;i++) // potential issue with 'true' cases 
+			for(int i = 0 ; i < finalbdds.length;i++) 
 			{
 				for(int j=0; j <2; j++)
 				{
@@ -128,43 +128,12 @@ class era_analyser extends BDD
 				deref(relevantBDD[i]);
 			}
 			//print(areReachable);
-			if(flag1==1)
-			{
-				
-				//System.out.println("For " + string1 + " and " + string2);
-			//	System.out.println("final output - Router Equivalence not satisfied");
-			}
-				
-			if(areReachable !=0 && flag1==0)
-			{
-				System.out.println("");
-				//System.out.println("invalid input");
-			//	print(areReachable);
-			}
-			else if(flag1==0)
-			{//	System.out.println("* inputted"); 
-				}
 			
-			else if(flag1==2)
-			
-				{//System.out.println("Final Output - Reachability is satisfied");
 				
-				}
-			else if(flag1==3) 
-			{
-				//System.out.println("Final Output - Reachability is satisfied");
-			}
-			else if(flag1 ==4)
-				{
-				//System.out.println(" Final Output - Valley Free policy satisfied" );
-				}
-			else if(flag1==6)
-				{
-				//System.out.println("Not reachable");
-				}
+			
 			long end_time = System.currentTimeMillis();
 			long difference = end_time-start_time;
-			//System.out.println("THIS IS REACHABLE TIME = " + difference);
+	
 			
 		}
 		public void callImplement()
@@ -178,17 +147,9 @@ class era_analyser extends BDD
 		    	if(bdds[i]!=0)
 		    	{
 		    		total.add(i);
-		    //		print(bdds[i]);
-		    		 
-		    	//	System.out.println(bdds[i] + " " +  i +  "IN VALS");
-		    		
-		   		
-		    	}
-		    //	System.out.println(total.size() + " = total size ");
-		    	
-		    }
-		  //  for(int i = 0; i < total.size();i++)
-		    	//System.out.println("total" +total.get(i));
+		 	}
+		     }
+		 
 		    
 		    
 		    int[] path = {21,34};
@@ -348,11 +309,11 @@ class era_analyser extends BDD
 			    	
 			    	if((vals).charAt((vals).length() -1)=='2')
 			    	{	      
-			   // 		System.out.println((vals).charAt((vals).length() -1));
+			   
 			    		temp = vals.substring(32,vals.length()-3);
 			    		
 			    		temp1[i] = Integer.parseInt(temp,2);
-			    	//	System.out.println(temp1[i]);
+			   
 			    	}
 			    	temp ="";
 			    }
@@ -364,8 +325,7 @@ class era_analyser extends BDD
 		}
 		public void routeRedistribute(int[] mapArray, Map ports,int sizeOfFile,ArrayList<String>[] listOfString)// new proto is just n bits, old is the entire thing
 		{
-			//trial begins here
-			//int [] mapArray = new int[ports.size()];
+		
 			int x=0;
 	        Iterator it = ports.entrySet().iterator();
 	        while (it.hasNext()) {
@@ -433,14 +393,10 @@ class era_analyser extends BDD
 		  	
 		    }
 		    
-		  //  System.out.println(temp1[0].size() + "Size outside loop");
+		 
 		    
 		   MinimizedTable M[]=new MinimizedTable[mapArray.length];
-		   // System.out.println(temp1[0].size() + "Temp length");
-		    for(int i = 0 ; i < temp1.length;i++)
-		    {
-		    //	System.out.println(temp1[i] +  "Temp1.leen");
-		    }
+		 
 		    for(int i = 0 ; i < temp1.length;i++)
 		    {
 		    	if(temp1[i] == null)
@@ -455,10 +411,9 @@ class era_analyser extends BDD
 		    
 			
 		    
-		    //System.out.println(temp1.length + "temp1.length");
-		 	//System.out.println("Temp1["+i+"] = " + temp1[i]);
+		  
 	 M[i] = new MinimizedTable(finalvals[i]);
-	 	//System.out.println("Minimized: " + M[i].toString());
+	 
 		   
 		    }
 		    era_analyser ap[] = new era_analyser[temp1.length];
@@ -466,7 +421,7 @@ class era_analyser extends BDD
 		    {
 		    	ap[i] = new era_analyser(M[i].toString());
 		    }
-	//	    return sizeOfFile;
+
 		}
 		public static era_analyser aggregation(List<String> listOfString, String aggregate) // make sure aggregate takes into consideration the prefix
 		{
@@ -609,7 +564,7 @@ class era_analyser extends BDD
 
 
 			long c1 = System.currentTimeMillis();
-			//System.out.println(sizeOfFile);
+		
 			Map<String,Integer> ports = new HashMap<String, Integer>();
 			int portVal = 0;
 		 //reading in the routers
@@ -657,7 +612,7 @@ class era_analyser extends BDD
         			 continue;
 			}
 			 
-			//topology(topo);
+		
 			
 		String direct;
         	for(int w =0 ; w < policy_id.size();w++)
@@ -751,14 +706,11 @@ class era_analyser extends BDD
 	        for(int i = 0; i < lines[j].length;i++)
 	        {
 	        	result[j] = lines[j][i].split("\\|");
-    			//System.out.println("resul[j][0] is = " + result[j][0] + " result[j][1]=" + result[j][1] + " result[j][2]="+result[j][2]+ " result[j][3] = " + result[j][3]);
-
-	        	//if(lines[j].length==1)
+    		
 	        	if((result[j][1].compareTo("drop")==0) || (result[j][1].compareTo("receive")==0) || (result[j][1].compareTo("attached")==0)||result[j].length==2)
 	        			continue;
 	        	else if(ports.get(result[j][0]+result[j][1]) == null)
 	        	{
-	        		//	System.out.println("resul[j][0] is = " + result[j][0] + " result[j][1]=" + result[j][1] + " result[j][2]="+result[j][2]+ " result[j][3] = " + result[j][3]);
 	        			ports.put(result[j][0]+result[j][1], portVal);
 	        			portVal++;
 	        	}
@@ -833,19 +785,13 @@ class era_analyser extends BDD
 		    
 		    String temp = "" ;
 		    String res1[] = new String[2];
-		    for(int i = 0 ; i < mapArray.length; i++)
-		    {
-		  //  	System.out.println(mapArray[i]+ "MAP ARRAY VALS");
-		    }
-		   //System.out.println("Size of maparray"+ mapArray.length);
+		   
 		    for(int k = 0; k < sizeOfFile;k++)
 		    {
 		    	
 		    	for(int j = 0 ; j < mapArray.length;j++)
 		    	{	
-		   // 		System.out.println(mapArray.length+ "map array length");
-		    	//	temp1[j]= new ArrayList<Integer>();
-		    //		System.out.println("outside i" + j);
+	
 		    		for(int i = 0; i < listOfString[k].size(); i++)
 		    		{
 		    	//		System.out.println("inside i" + i);
