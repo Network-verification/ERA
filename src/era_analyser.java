@@ -1127,15 +1127,11 @@ class era_analyser extends BDD
 					System.out.println("Interfaces:" + output1[0] + " with prefix:" + output1[1] );
 				}
 			}	
-		    else if(flag1 == 0)
-		    	System.out.println("Result = Reachable prefixes found");
-		    else if(!Arg5.equals("-v"))
-		    	System.out.println("Result = Violations detected");
+		    
+	
 
 		    System.out.println("======================");
-		  //  if(Args[2].equals("reachability*"))
-		   // else if(flag1!=1||!Args[2].equals("reachability*"))
-		    //	System.out.println("No violations");
+		
 		    }
 	}
 		}			
