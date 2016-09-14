@@ -1,3 +1,5 @@
+package support;
+
 import java.util.HashMap;
 
 public class community_tag {
